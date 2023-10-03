@@ -178,39 +178,39 @@ using System.Text.Json;
 
 #region ComplexTypeMesajGönderme
 
-var factory = new ConnectionFactory { Uri = new Uri("amqps://rjdlwutw:nGKtKeOVDhZPWl6A56oPW42F8nUnu8Hg@beaver.rmq.cloudamqp.com/rjdlwutw") };
+//var factory = new ConnectionFactory { Uri = new Uri("amqps://rjdlwutw:nGKtKeOVDhZPWl6A56oPW42F8nUnu8Hg@beaver.rmq.cloudamqp.com/rjdlwutw") };
 
-using var connection = factory.CreateConnection();
-var channel = connection.CreateModel();
+//using var connection = factory.CreateConnection();
+//var channel = connection.CreateModel();
 
-channel.BasicQos(0, 1, false);
+//channel.BasicQos(0, 1, false);
 
-channel.ExchangeDeclare("header-exchange", durable: true, type: ExchangeType.Headers);
+//channel.ExchangeDeclare("header-exchange", durable: true, type: ExchangeType.Headers);
 
-var consumer = new EventingBasicConsumer(channel);
-var queueName = channel.QueueDeclare().QueueName;
+//var consumer = new EventingBasicConsumer(channel);
+//var queueName = channel.QueueDeclare().QueueName;
 
-Dictionary<string, object> headers = new Dictionary<string, object>();
-headers.Add("format", "pdf");
-headers.Add("shape", "a4");
-headers.Add("x-match", "any");
+//Dictionary<string, object> headers = new Dictionary<string, object>();
+//headers.Add("format", "pdf");
+//headers.Add("shape", "a4");
+//headers.Add("x-match", "any");
 
 
-channel.QueueBind(queueName, "header-exchange", "", headers);
-channel.BasicConsume(queueName, false, consumer);
+//channel.QueueBind(queueName, "header-exchange", "", headers);
+//channel.BasicConsume(queueName, false, consumer);
 
-Console.WriteLine("Loglar dinleniyor..");
+//Console.WriteLine("Loglar dinleniyor..");
 
-//Consumerlar aynı dataları alır.
-consumer.Received += (object sender, BasicDeliverEventArgs e) =>
-{
-    var message = Encoding.UTF8.GetString(e.Body.ToArray());
-    Product  product = JsonSerializer.Deserialize<Product>(message);
+////Consumerlar aynı dataları alır.
+//consumer.Received += (object sender, BasicDeliverEventArgs e) =>
+//{
+//    var message = Encoding.UTF8.GetString(e.Body.ToArray());
+//    Product  product = JsonSerializer.Deserialize<Product>(message);
 
-    Thread.Sleep(1000);
-    Console.WriteLine($"Gelen Mesaj : Id : {product.Id}, Name: {product.Name}, Price: {product.Price}, Stock: {product.Stock}");
-    channel.BasicAck(e.DeliveryTag, false);
-};
+//    Thread.Sleep(1000);
+//    Console.WriteLine($"Gelen Mesaj : Id : {product.Id}, Name: {product.Name}, Price: {product.Price}, Stock: {product.Stock}");
+//    channel.BasicAck(e.DeliveryTag, false);
+//};
 
 #endregion
 
